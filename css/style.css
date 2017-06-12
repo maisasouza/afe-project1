@@ -1,0 +1,30 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.navbar {
+    background-color: lightblue;
+    min-height: 50px;
+    margin-bottom: 0;
+}
+
+.sidebar {
+    background-color: beige;
+    padding: 30px 7px 7px 7px;
+    height: 100%;
+    /*float: left;
+    margin: 0 0 0 0;
+    width: 350px;*/
+}
+
+.container-fluid {
+    height: 100%;
+}
+
+.row-unique {
+    height: 100%;
+}

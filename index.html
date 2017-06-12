@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Álbum de Fotos</title>
+</head>
+
+<body>
+    <div class="navbar">
+        <a class="navbar-brand" href="#">Álbum de Fotos</a>
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <a href="#">Novo Álbum</a>
+            </li>
+            <li>
+                <a href="#">Selecionar Fotos</a>
+            </li>
+            <li>
+                <a href="#">Slideshow</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row row-unique">
+        <div class="col-xs-3 sidebar">
+            <div class="container-fluid">
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" id="nome_album" placeholder="Nome">
+                        <button class="btn btn-sm btn-primary"> Criar álbum </button>
+                    </div>
+                </form>
+
+                <div id="lista_albuns">
+                    <div class="page-header">
+                        <h5> Lista dos álbuns criados </h5>
+
+                        <ul class="list-group">
+                            <li class="list-group-item">Album 1</li>
+                            <li class="list-group-item">Album 2</li>
+                            <li class="list-group-item">Album 3</li>
+                        </ul>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-9 content-area">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2> Album 1 </h2>
+                </div>
+                <div class="page-body">
+                    teste
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
