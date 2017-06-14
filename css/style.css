@@ -16,25 +16,26 @@ body {
     background-color: beige;
     padding: 30px 7px 7px 7px;
     height: 100%;
+    display: table-cell;
+    float: none;
 }
 
-.container-fluid {
-    height: 100%;
+#content-area {
+    display: table-cell;
+    float: none;
+    padding-left: 100px;
 }
 
 .row-unique {
     height: 100%;
-}
-
-.row {
-    border: 1px solid green;
+    display: table;
 }
 
 .img-centered {
     margin: 0 auto;
+    width: 60%;
 }
 
 #slideshow {
-    margin-top: 30px;
-    position: relative;
+    margin-top: 50px;
 }
