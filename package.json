@@ -9,6 +9,8 @@
   "author": "maisa.souza",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "btoa": "^1.1.2",
+    "http-server": "^0.10.0"
   }
 }

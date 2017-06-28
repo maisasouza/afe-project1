@@ -11,12 +11,67 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js">
     </script>
+
+    <script>
+        var clientId = 'bd15b1e768bb9e7e3d53';
+        var clientSecret = 'b6626a26b8c4214893a06cf8d9a3c63891f6ac5d'
+
+        var code = undefined
+        var accessToken = undefined;
+        var tokenType = undefined;
+
+        if (window.location.href.match(/code=(.*)&/)) {
+            code = window.location.href.match(/code=(.*)&/)[1];
+        }
+
+        var API_URL = 'https://api.shutterstock.com/v2';
+
+        // Base 64 encode Client ID and Client Secret for use in the Authorization header
+        function encodeAuthorization() {
+            return 'Basic ' + window.btoa(clientId + ':' + clientSecret);
+        }
+
+        if (code !== undefined) {
+            var jqxhr = $.ajax({
+                type: 'POST',
+                url: API_URL + '/oauth/access_token',
+                data: {
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                    code: code,
+                    grant_type: 'client_credentials'
+                },
+                success: function(response) {
+                    console.log('Eureka !!');
+                    console.log(response);
+
+                    accessToken = response.access_token;
+                    tokenType = response.token_type;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: API_URL + '/images/collections/62794010/items',
+                        headers: {
+                            Authorization: 'Bearer: ' + accessToken
+                        },
+                        success: function(response) {
+                            console.log('Estamos fodas');
+                            console.log(response);
+                        }
+                    });
+
+                }
+            });
+        }
+    </script>
+
     <title>Álbum de Fotos</title>
 </head>
 
 <body>
     <div class="navbar">
         <a class="navbar-brand" href="#">Álbum de Fotos</a>
+        <a class="text-right" href="https://api.shutterstock.com/v2/oauth/authorize?client_id=bd15b1e768bb9e7e3d53&redirect_uri=http://localhost:8000/index.html&response_type=code&state=bla&scope=collection.view"> Login </a>
     </div>
 
     <div class="container-fluid">
