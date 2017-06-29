@@ -13,6 +13,7 @@
     </script>
 
     <script>
+        // http-server -S -C cert.pem -o
         var clientId = 'bd15b1e768bb9e7e3d53'; //PInterest: 4908995587518509738
         var clientPinterestId = '4908995587518509738';
         var clientSecret = 'b6626a26b8c4214893a06cf8d9a3c63891f6ac5d'; //PInterest: d6340c3e76f2bced981526090f37e6d57d6cff68e604494015b4fd363495deba
@@ -51,8 +52,8 @@
 
                     $.ajax({
                         type: 'GET',
-                        contentType: "application/json; charset=utf-8",
-                        url: API_URL + '/me', //'/images/collections/62794010/items',
+                        // contentType: "application/json; charset=utf-8",
+                        url: API_URL + '/me/?access_token=' + accessToken + '&fields=first_name', //'/images/collections/62794010/items',
                         crossDomain: true,
                         dataType: 'json',
                         beforeSend: function(xhr) {
