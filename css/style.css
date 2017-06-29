@@ -39,3 +39,12 @@ body {
 #slideshow {
     margin-top: 50px;
 }
+
+.btn-right {
+    float: right;
+    margin-right: 20px;
+}
+
+.btn-menu {
+    margin-top: 7px;
+}

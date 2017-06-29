@@ -13,34 +13,35 @@
     </script>
 
     <script>
-        var clientId = 'bd15b1e768bb9e7e3d53';
-        var clientSecret = 'b6626a26b8c4214893a06cf8d9a3c63891f6ac5d'
+        var clientId = 'bd15b1e768bb9e7e3d53'; //PInterest: 4908995587518509738
+        var clientPinterestId = '4908995587518509738';
+        var clientSecret = 'b6626a26b8c4214893a06cf8d9a3c63891f6ac5d'; //PInterest: d6340c3e76f2bced981526090f37e6d57d6cff68e604494015b4fd363495deba
+        var clientPinterestSecret = 'd6340c3e76f2bced981526090f37e6d57d6cff68e604494015b4fd363495deba';
 
         var code = undefined
         var accessToken = undefined;
         var tokenType = undefined;
 
-        if (window.location.href.match(/code=(.*)&/)) {
-            code = window.location.href.match(/code=(.*)&/)[1];
+        if (window.location.href.match(/code=(.*)/)) {
+            code = window.location.href.match(/code=(.*)/)[1];
+            console.log('code:');
+            console.log(code);
         }
 
-        var API_URL = 'https://api.shutterstock.com/v2';
+        var API_URL = 'https://api.pinterest.com/v1'; // 'https://api.shutterstock.com/v2';
+        var url_redirect =
 
-        // Base 64 encode Client ID and Client Secret for use in the Authorization header
-        function encodeAuthorization() {
-            return 'Basic ' + window.btoa(clientId + ':' + clientSecret);
-        }
+            // Base 64 encode Client ID and Client Secret for use in the Authorization header
+            function encodeAuthorization() {
+                return 'Basic ' + window.btoa(clientId + ':' + clientSecret);
+            }
 
         if (code !== undefined) {
+            console.log('entrei aqui');
             var jqxhr = $.ajax({
                 type: 'POST',
-                url: API_URL + '/oauth/access_token',
-                data: {
-                    client_id: clientId,
-                    client_secret: clientSecret,
-                    code: code,
-                    grant_type: 'client_credentials'
-                },
+                url: API_URL + '/oauth/token?grant_type=authorization_code&client_id=' + clientPinterestId + '&client_secret=' +
+                    clientPinterestSecret + '&code=' + code, // authorization_code
                 success: function(response) {
                     console.log('Eureka !!');
                     console.log(response);
@@ -50,9 +51,13 @@
 
                     $.ajax({
                         type: 'GET',
-                        url: API_URL + '/images/collections/62794010/items',
-                        headers: {
-                            Authorization: 'Bearer: ' + accessToken
+                        contentType: "application/json; charset=utf-8",
+                        url: API_URL + '/me', //'/images/collections/62794010/items',
+                        crossDomain: true,
+                        dataType: 'json',
+                        beforeSend: function(xhr) {
+                            /* Authorization header */
+                            xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
                         },
                         success: function(response) {
                             console.log('Estamos fodas');
@@ -71,7 +76,10 @@
 <body>
     <div class="navbar">
         <a class="navbar-brand" href="#">Álbum de Fotos</a>
-        <a class="text-right" href="https://api.shutterstock.com/v2/oauth/authorize?client_id=bd15b1e768bb9e7e3d53&redirect_uri=http://localhost:8000/index.html&response_type=code&state=bla&scope=collection.view"> Login </a>
+        <!--  -->
+        <!-- a class="btn btn-primary btn-right btn-menu " href="https://api.shutterstock.com/v2/oauth/authorize?scope=collections.view&client_id=bd15b1e768bb9e7e3d53&redirect_uri=http://localhost:8080/index.html&response_type=code&state=bla"> Faça login no shutterstock </a -->
+        <a class="btn btn-primary btn-right btn-menu " href="https://api.pinterest.com/oauth/?response_type=code&redirect_uri=https://localhost:8080/index.html&client_id=4908995587518509738&scope=read_public,write_public&state=bla"> Faça login no pinterest </a>
+
     </div>
 
     <div class="container-fluid">
