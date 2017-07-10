@@ -48,3 +48,13 @@ body {
 .btn-menu {
     margin-top: 7px;
 }
+
+#spaceImages img {
+    height: 200px;
+}
+
+@media only screen and (max-width: 768px) {
+    #spaceImages img {
+        height: 80px;
+    }
+}

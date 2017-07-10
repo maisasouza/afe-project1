@@ -22,6 +22,7 @@
         var code = undefined
         var accessToken = undefined;
         var tokenType = undefined;
+        var photos = undefined;
 
         if (window.location.href.match(/code=(.*)/)) {
             code = window.location.href.match(/code=(.*)/)[1];
@@ -30,45 +31,92 @@
         }
 
         var API_URL = 'https://api.pinterest.com/v1'; // 'https://api.shutterstock.com/v2';
-        var url_redirect =
+        // var url_redirect =
 
-            // Base 64 encode Client ID and Client Secret for use in the Authorization header
-            function encodeAuthorization() {
-                return 'Basic ' + window.btoa(clientId + ':' + clientSecret);
-            }
+        // Base 64 encode Client ID and Client Secret for use in the Authorization header
+        function encodeAuthorization() {
+            return 'Basic ' + window.btoa(clientId + ':' + clientSecret);
+        }
 
         if (code !== undefined) {
-            console.log('entrei aqui');
             var jqxhr = $.ajax({
                 type: 'POST',
                 url: API_URL + '/oauth/token?grant_type=authorization_code&client_id=' + clientPinterestId + '&client_secret=' +
                     clientPinterestSecret + '&code=' + code, // authorization_code
                 success: function(response) {
-                    console.log('Eureka !!');
-                    console.log(response);
-
                     accessToken = response.access_token;
                     tokenType = response.token_type;
 
                     $.ajax({
                         type: 'GET',
-                        // contentType: "application/json; charset=utf-8",
-                        url: API_URL + '/me/?access_token=' + accessToken + '&fields=first_name', //'/images/collections/62794010/items',
+                        url: API_URL + '/boards/front_e/minhapasta/pins/?access_token=' + accessToken + '&fields=image',
                         crossDomain: true,
                         dataType: 'json',
-                        beforeSend: function(xhr) {
-                            /* Authorization header */
-                            xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
-                        },
                         success: function(response) {
-                            console.log('Estamos fodas');
-                            console.log(response);
+                            photos = response.data;
+                            var html = '';
+                            var lineOpened = false;
+
+                            photos.forEach(function(element, index, array) {
+                                if (index % 4 === 0) { //Create a row
+                                    html += '<div class="row ">';
+                                    lineOpened = true;
+                                }
+
+                                html +=
+                                    "<div class='col-xs-3'> <a href='#' class='thumbnail'> <input type='checkbox' /> <img src='" +
+                                    element.image.original.url + "'> </a> </div>";
+
+                                if (index % 4 === 3) { //Finish a row
+                                    html += '</div>';
+                                    lineOpened = false;
+                                }
+                            });
+
+                            if (lineOpened === true) {
+                                html += '</div>';
+                                lineOpened = false;
+                            }
+
+                            $('#spaceImages').html(html);
                         }
                     });
 
                 }
             });
         }
+
+
+        $(document).ready(function() {
+            $('#spaceImages').html(
+                "<p> Faça login no pinterest com o botão acima para ver as imagens !</p> <p> <b> Login: </b> frontend@chammy.info <b> Senha: </b> abc123456 </p>"
+            );
+
+            $('#slideshow').hide();
+
+            $('#slideshowButton').click(function() {
+                var htmlIndicators = '';
+                var htmlCarouselPics = '';
+                $('input:checked').each(function(index) {
+                    console.log(index);
+                    if (index === 0) {
+                        htmlIndicators += '<li data-target="#slideshow" data-slide-to="' + index + '" class="active"></li>';
+
+                        htmlCarouselPics += '<div class="item active"> <img src="' + $(this).next('img').prop('src') +
+                            '" class="img-centered"> </div>';
+                    } else {
+                        htmlIndicators += '<li data-target="#slideshow" data-slide-to="' + index + '"></li>';
+
+                        htmlCarouselPics += '<div class="item"> <img src="' + $(this).next('img').prop('src') +
+                            '" class="img-centered"> </div>';
+                    }
+                });
+
+                $('#indicators').html(htmlIndicators);
+                $('#carouselPics').html(htmlCarouselPics);
+                $('#slideshow').show('slow');
+            });
+        });
     </script>
 
     <title>Álbum de Fotos</title>
@@ -77,8 +125,6 @@
 <body>
     <div class="navbar">
         <a class="navbar-brand" href="#">Álbum de Fotos</a>
-        <!--  -->
-        <!-- a class="btn btn-primary btn-right btn-menu " href="https://api.shutterstock.com/v2/oauth/authorize?scope=collections.view&client_id=bd15b1e768bb9e7e3d53&redirect_uri=http://localhost:8080/index.html&response_type=code&state=bla"> Faça login no shutterstock </a -->
         <a class="btn btn-primary btn-right btn-menu " href="https://api.pinterest.com/oauth/?response_type=code&redirect_uri=https://localhost:8080/index.html&client_id=4908995587518509738&scope=read_public,write_public&state=bla"> Faça login no pinterest </a>
 
     </div>
@@ -113,129 +159,18 @@
                 <div class="row page-header ">
                     <h2> Album 1 - Selecionar Fotos </h2>
                 </div>
-                <div class="row ">
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                </div>
-                <div class="row ">
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                </div>
-                <div class="row ">
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="thumbnail">
-                            <div>
-                                <input type="checkbox" />
-                            </div>
-                            <img src="download.jpg" alt="comida">
-                        </a>
-                    </div>
+                <div id="spaceImages">
                 </div>
                 <div class="row">
-                    <a href="#slideshow"> <button class="btn-lg btn-primary form-control"> Ver Slideshow </button> </a>
+                    <a> <button id="slideshowButton" class="btn-lg btn-primary form-control"> Ver Slideshow </button> </a>
                 </div>
                 <div class="row">
                     <div id="slideshow" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#slideshow" data-slide-to="0" class="active"></li>
-                            <li data-target="#slideshow" data-slide-to="1"></li>
-                            <li data-target="#slideshow" data-slide-to="2"></li>
+                        <ol id="indicators" class="carousel-indicators">
                         </ol>
 
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <img src="download.jpg" alt="comida" class="img-centered">
-                            </div>
-                            <div class="item">
-                                <img src="download.jpg" alt="comida" class="img-centered">
-                            </div>
-                            <div class="item">
-                                <img src="download.jpg" alt="comida" class="img-centered">
-                            </div>
+                        <div id="carouselPics" class="carousel-inner">
+
                         </div>
 
                         <!-- Left and right controls -->
